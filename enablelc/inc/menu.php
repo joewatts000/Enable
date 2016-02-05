@@ -1,5 +1,5 @@
 <header class="row">
-  <div class="content_wrap">
+  	<div class="content_wrap">
 		<div id="top_bar">
 			<div class="content_wrapX clearfix">
 		
@@ -9,17 +9,14 @@
 			
 				<div class="col-xs-12 col-sm-8 clearfix">
 					<?php
-					wp_nav_menu(array(
-						'theme_location' => 'access-menu',
-						'menu_id' => 'accessibility_menu',
-						'menu_class' => 'clearfix',
-
-						'fallback_cb' => false
-					));
+						wp_nav_menu(array(
+							'theme_location' => 'access-menu',
+							'menu_id' => 'accessibility_menu',
+							'menu_class' => 'clearfix',
+							'fallback_cb' => false
+						));
 					?>
-				</div>
-
-			
+				</div>			
 			</div>
 		</div>
 	
@@ -35,19 +32,19 @@
 				</div>
 		
 				<div id="navbar" class="navbar-collapse collapse">
-				<?php
-					wp_nav_menu( array(
-						'menu'              => 'primary',
-						'theme_location'    => 'primary',
-						'depth'             => 2,
-						'container'         => 'div',
-						'container_class'   => 'collapse navbar-collapse',
-						'container_id'      => 'navbar',
-						'menu_class'        => 'nav navbar-nav',
-						'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
-						'walker'            => new wp_bootstrap_navwalker())
-					);
-				?>
+					<?php
+						wp_nav_menu( array(
+							'menu'              => 'primary',
+							'theme_location'    => 'primary',
+							'depth'             => 2,
+							'container'         => 'div',
+							'container_class'   => 'collapse navbar-collapse',
+							'container_id'      => 'navbar',
+							'menu_class'        => 'nav navbar-nav',
+							'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+							'walker'            => new wp_bootstrap_navwalker())
+						);
+					?>
 				</div>
 			</div>
 		</nav>

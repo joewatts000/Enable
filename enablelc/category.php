@@ -10,6 +10,14 @@ get_template_part('inc/banner_blog');
 		</div>
 		<section>
 			<div class="column_wrapper row">
+				<?php 
+					if(get_field('alt_title') == ''){
+						//echo '<h2 class="page-title">'.get_the_title().'</h2>';
+					}else {
+						//$title = get_field('alt_title');
+						//echo '<h2 class="page-title">'.$title.'</h2>';
+					}
+				?>	
 				<div class="content_wrap">
 					<h1 class="page-title blog-title"><?php _e( 'Category: ', 'youniverse' ); single_cat_title(); ?></h1>
 

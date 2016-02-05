@@ -20,7 +20,7 @@
 							<?php
 						}
 					?>
-					<div class="calendar-container">
+					
 						<div class="calendar-filters">
 
 							<select>
@@ -63,7 +63,7 @@
 								// wp_list_categories( $args ); 
 							?>
 						</div>
-					
+					<div class="calendar-container">
 			        	<?php 
 			        		//echo '<span class="ajaxurl">'.admin_url('admin-ajax.php').'</span>';
 			        		//$chosenMonth = 0;
@@ -77,12 +77,19 @@
 							//echo "Month: " + $thisMonth + '<p>hhh</p>';
 							echo draw_calendar($thisMonth, $thisYear);
 			        	?>
+			        	
 		        	</div>
-		        	<div class="cal-popup"><div class="cal-popup-inner"></div></div>
-		        	<div class="col-xs-12">
-		        		<div class="pull-left"><a href="#" class="cal-prev">Prev Month</a></div>
-		        		<div class="pull-right"><a href="#" class="cal-next">Next Month</a></div>
+		        	<div class="cal-popup">
+		        		<div class="cal-popup-inner container">
+		        			<div class="cal-scroller">
+
+		        			</div>		        			
+		        		</div>
 		        	</div>
+		        	<div class="col-xs-12 calendar-controls">
+			        		<div class="pull-left no-padding"><a href="#" class="cal-prev">Prev Month</a></div>
+			        		<div class="pull-right no-padding"><a href="#" class="cal-next">Next Month</a></div>
+			        </div>
 					<?php get_template_part('pagination'); ?>
 				</div>
 			</div>

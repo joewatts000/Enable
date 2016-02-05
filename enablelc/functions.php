@@ -16,6 +16,8 @@
     Theme Support
 \*------------------------------------*/
 
+
+
 if (!isset($content_width))
 {
     $content_width = 1170;
@@ -401,6 +403,8 @@ add_filter('image_send_to_editor', 'remove_width_attribute', 10 ); // Remove wid
 		wp_enqueue_style('enablecss');
 		wp_register_style('html5blankcss', get_template_directory_uri() . '/dale.css', array(), '1.0');
 		wp_enqueue_style('html5blankcss');
+		wp_register_style('joecss', get_template_directory_uri() . '/joe.css', array(), '1.0');
+		wp_enqueue_style('joecss');
 	}
 	add_action('wp_enqueue_scripts', 'enable_styles', PHP_INT_MAX); // Add Theme Stylesheet
 
@@ -650,9 +654,6 @@ add_filter('image_send_to_editor', 'remove_width_attribute', 10 ); // Remove wid
         'parks' => __('Parks Menu', 'enable'),
         'leisure_and_sport' => __('Sport and Leisure menu', 'enable'),
         'film_services' => __('Film Services page menu', 'enable'),
-        'art_projects' => __('Arts Projects sub menu', 'enable'),
-        'art_approach' => __('Arts Approach sub menu', 'enable'),
-        'art_grants' => __('Arts Grants sub menu', 'enable'),
         'putney_about' => __('Putney About Us Sidebar Menu', 'enable'),
         'bereavement_sidebar' => __('Bereavement Sidebar Menu', 'enable')
     ));
@@ -709,6 +710,22 @@ function rounded_btns ($btns) {
     return '<a href="'.$url.'" class="rounded-btn">'.$text.'</a>';
 }
 add_shortcode('round_btn', 'rounded_btns'); 
+
+function add_strapline ($strap) {
+    extract( shortcode_atts( array(
+      'text' => 'text'
+    ), $strap ) );
+    return '<p class="enable_strapline">'.$text.'</p>';
+}
+add_shortcode('strapline', 'add_strapline'); 
+
+function add_caption ($caption) {
+    extract( shortcode_atts( array(
+      'text' => 'text'
+    ), $caption ) );
+    return '<p class="image_caption">'.$text.'</p>';
+}
+add_shortcode('image_caption', 'add_caption'); 
 
 
 /*------------------------------------*\
@@ -843,13 +860,13 @@ if( function_exists('acf_add_options_page') ) {
 
 add_filter('wp_nav_menu_items','add_search_box_to_menu', 10, 2);
 function add_search_box_to_menu( $items, $args ) {
-    if( $args->theme_location == 'access-menu' ){
-        $items .= '<li class="search"><a href="#" class="open-search">Search</a></li>';
-        $items .= '<li class="feedback-form"><a href="#" class="open-feedback-form">Feedback</a>';
-    }
-        //return $items.get_search_form();
+	if( $args->theme_location == 'access-menu' ){
+		$items .= '<li class="search"><a href="#" class="open-search">Search</a></li>';
+		$items .= '<li class="feedback-form"><a href="#" class="open-feedback-form">Feedback</a>';
+	}
+	//return $items.get_search_form();
 
-    return $items;
+	return $items;
 }
 
 
@@ -1149,7 +1166,7 @@ function draw_calendar($month,$year){
                     $post_class =  implode(" ", get_post_class());
                     $link = get_permalink();
                     $calendar.= '<a href="'. $link .'" class="has-event '. $post_class .'"> '. get_the_title() .' </a>';
-                    $calendar.= '<div class="hidden-calendar-poup">'. get_the_content().'</div>';
+                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
                 endwhile;
                 $calendar.= '</div>';
                 wp_reset_postdata();
@@ -1176,7 +1193,7 @@ function draw_calendar($month,$year){
                         $post_class =  implode(" ", get_post_class());
                         $link = get_permalink();
                         $calendar.= '<a href="'. $link .'" class="has-event '. $post_class .'"> '. get_the_title() .' </a>';
-                        $calendar.= '<div class="hidden-calendar-poup">'. get_the_content().'</div>';
+                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
                     endwhile;
                     $calendar.= '</div>';
                     wp_reset_postdata();
@@ -1474,10 +1491,6 @@ function get_offset() {
     /* all done, return result */
     echo $calendar;
 
-
-
-
-
   }
 
   die;
@@ -1485,52 +1498,39 @@ function get_offset() {
 
 
 
-	function remove_editor_init() {
-			// If not in the admin, return.
-			if ( ! is_admin() ) {
-				 return;
-			}
-
-			// Get the post ID on edit post with filter_input super global inspection.
-			$current_post_id = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
-			// Get the post ID on update post with filter_input super global inspection.
-			$update_post_id = filter_input( INPUT_POST, 'post_ID', FILTER_SANITIZE_NUMBER_INT );
-
-			// Check to see if the post ID is set, else return.
-			if ( isset( $current_post_id ) ) {
-				 $post_id = absint( $current_post_id );
-			} else if ( isset( $update_post_id ) ) {
-				 $post_id = absint( $update_post_id );
-			} else {
-				 return;
-			}
-
-			// Don't do anything unless there is a post_id.
-			if ( isset( $post_id ) ) {
-				 // Get the template of the current post.
-				 $template_file = get_post_meta( $post_id, '_wp_page_template', true );
-
-				 // Example of removing page editor for page-your-template.php template.
-				 if ( 'homepage.php' === $template_file ) {
-						 remove_post_type_support( 'page', 'editor' );
-						 // Other features can also be removed in addition to the editor. See: https://codex.wordpress.org/Function_Reference/remove_post_type_support.
-				 }
-			}
+function remove_editor_init() {
+	// If not in the admin, return.
+	if ( ! is_admin() ) {
+		 return;
 	}
-	add_action( 'init', 'remove_editor_init' );
 
+	// Get the post ID on edit post with filter_input super global inspection.
+	$current_post_id = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
+	// Get the post ID on update post with filter_input super global inspection.
+	$update_post_id = filter_input( INPUT_POST, 'post_ID', FILTER_SANITIZE_NUMBER_INT );
 
-function wpb_list_child_pages() {
-	global $post;
-	
-	if ( is_page() && $post->post_parent ) {
-		$childpages = wp_list_pages( 'sort_column=menu_order&depth=1&title_li=&child_of=' . $post->post_parent . '&echo=0' );
+	// Check to see if the post ID is set, else return.
+	if ( isset( $current_post_id ) ) {
+		 $post_id = absint( $current_post_id );
+	} else if ( isset( $update_post_id ) ) {
+		 $post_id = absint( $update_post_id );
 	} else {
-		$childpages = wp_list_pages( 'sort_column=menu_order&depth=1&title_li=&child_of=' . $post->ID . '&echo=0' );
+		 return;
 	}
-	
-	if ( $childpages ) {
-		$string = '<ul class="child_page_menu">' . $childpages . '</ul>';
+
+	// Don't do anything unless there is a post_id.
+	if ( isset( $post_id ) ) {
+		// Get the template of the current post.
+		$template_file = get_post_meta( $post_id, '_wp_page_template', true );
+
+		// Example of removing page editor for page-your-template.php template.
+		if ( 'homepage.php' === $template_file ) {
+			 remove_post_type_support( 'page', 'editor' );
+			 // Other features can also be removed in addition to the editor. See: https://codex.wordpress.org/Function_Reference/remove_post_type_support.
+		}
 	}
-	return $string;
 }
+add_action( 'init', 'remove_editor_init' );
+
+
+

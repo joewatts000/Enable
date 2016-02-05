@@ -9,51 +9,132 @@ get_template_part('inc/banner');
 				<?php custom_breadcrumbs(); ?>
 			</div>
 		</div>
-		
-		<?php
-		// echo '
-		// <div id="icon_about_us_page_menu" class="row icon_menu">
-		// 	<div class="content_wrap">				
-		// 		';
-		// 		wp_nav_menu(array(
-		// 			'theme_location' => 'about_us',
-		// 			'container' => 'div',
-		// 			'container_class' => 'about_us_icon_wrapper clearfix',
-		// 			'menu_class' => 'clearfix',
-		// 			'fallback_cb' => false
-		// 		));
-		// 		echo '
-		// 	</div>
-		// </div>
-		// ';
-		?>
 
-		<section class="row">
-			<div class="content_wrap clearfix">
-				<h1 class="page-title"><?php the_title(); ?></h1>		
-				<?php 
-				if (have_posts()): while (have_posts()) : the_post(); ?>
-					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-						<?php the_content(); ?>
-						<br class="clear" />
-					</article>
-				<?php 
-				endwhile;
-				else: 
-				?>
-					<article>
-						<h2><?php _e( 'Sorry, nothing to display.', 'Enable' ); ?></h2>
-					</article>
-				<?php endif; ?>	
-			</div>
-		</section>
+		<div class="column_wrapper row">
+			<?php 
+				if(!get_field('hide_heading')){
+					if(get_field('alt_title') == ''){
+						echo '<h2 class="page-title">'.get_the_title().'</h2>';
+					}else {
+						$title = get_field('alt_title');
+						echo '<h2 class="page-title">'.$title.'</h2>';
+					}
+				}
+			?>		
+
+			<section class="">
+				<div class="content_wrap clearfix">
+					<div class="col-xs-12">
+
+						<?php 
+						if (have_posts()): while (have_posts()) : the_post(); ?>
+							<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+								<?php the_content(); ?>
+								<br class="clear" />
+							</article>
+						<?php 
+						endwhile;
+						else: 
+						?>
+							<article>
+								<h2><?php _e( 'Sorry, nothing to display.', 'Enable' ); ?></h2>
+							</article>
+						<?php endif; ?>	
+					</div>
+				</div>
+			</section>
+
+
+
+			<?php
+
+				// check if the flexible content field has rows of data
+				if( have_rows('add_a_block') ){
+				     // loop through the rows of data
+				     echo '
+						<section class="row">
+							<div class="content_wrap">
+								<div class="col-xs-12">
+							';
+								    while ( have_rows('add_a_block') ) {
+								    	the_row();	
+
+								        if( get_row_layout() == 'text_left_image_right' ){
+								        	echo '<div class="col-xs-12 alternating-cols"><div class="col-sm-8">';
+									        	$content = get_sub_field('content');
+									        	echo $content;
+									        echo '</div><div class="col-sm-4">';
+									        	$image = get_sub_field('image');
+									        	echo '<img src="'.$image.'" class="alignright">'; 
+									        echo '</div>';
+									        echo '</div>';							        	
+
+								        }else if( get_row_layout() == 'text_right_image_left' ){
+								        	echo '<div class="col-xs-12 alternating-cols"><div class="col-sm-4">';
+									        	$image = get_sub_field('image');
+									        	echo '<img src="'.$image.'">'; 
+									        echo '</div><div class="col-sm-8">';
+									        	$content = get_sub_field('content');
+									        	echo $content;
+									        echo '</div>';
+									        echo '</div>';	
+								        	
+								        }else if ( get_row_layout() == 'full_width_content'){
+								        	echo '<div class="col-xs-12 full-width-col">';
+									        	$content = get_sub_field('content');
+									        	echo $content;
+									        echo '</div>';	
+								        }
+								    }
+
+				    echo '
+								</div>
+							</div>
+						</section>	
+						';
+
+				}else {
+					
+				}
+
+			?>
+
+			<?php 
+				if(have_rows('btn_grid')){
+					echo '
+						<section class="row">
+							<div class="content_wrap">
+								<div class="col-xs-12 full-width-col">
+							';
+
+							$size = get_field('grid_size');
+							while (have_rows('btn_grid')) {
+								the_row();
+								echo '
+									<a href="'.get_sub_field('link').'">
+										<div class="'.$size.' btn-grid">
+											<img src="'.get_sub_field('image').'">
+											<div>'.get_sub_field('content').'</div>
+										</div>
+									</a>
+								';
+							}
+					echo '
+								</div>
+							</div>
+						</section>	
+						';
+				}
+			?>
+
 			
 			<?php // feature panels
 				// check if the repeater field has rows of data
 				if(have_rows('features')){
 					echo '
-					<section class="row features">
+					<section class="features">
 						<div class="content_wrap">
+							<div class="col-xs-12">
 						';
 							while (have_rows('features')){ 
 								the_row();
@@ -71,6 +152,7 @@ get_template_part('inc/banner');
 							<?php
 						}
 						echo '
+							</div>
 						</div>
 					</section>	
 					';
@@ -82,8 +164,9 @@ get_template_part('inc/banner');
 			<?php // DR features (!)
 			if(get_field('dr_01') || get_field('about_us_image')){
 				echo '
-				<section class="row dr_test">
+				<section class="dr_test">
 					<div class="content_wrap">
+						<div class="col-xs-12">
 					';
 					
 						if(get_field('dr_01')){
@@ -110,6 +193,7 @@ get_template_part('inc/banner');
 						}
 						
 					echo '
+						</div>
 					</div>
 				</section>	
 				';
@@ -119,8 +203,9 @@ get_template_part('inc/banner');
 		<?php // check if the repeater field has rows of data
 			if (have_rows('tabs')){
 				echo '
-				<section class="row">
+				<section class="">
 					<div class="content_wrap">
+						<div class="col-xs-12">
 					';
 					// tabs first
 					echo '<ul class="nav nav-tabs" role="tablist">';
@@ -150,6 +235,7 @@ get_template_part('inc/banner');
 								$count ++;
 							}
 							echo '
+							</div>
 						</div>
 					</div>
 				</section>	
@@ -160,6 +246,48 @@ get_template_part('inc/banner');
 			}
 		?>
 
+		<?php 
+					if(have_rows('add_accordion')){
+						$count = 1;
+						echo '
+						<section class="row">
+							<div class="content_wrap">
+								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+							  ';
+
+							  while (have_rows('add_accordion') ){
+							  	the_row();
+							  		$count++;
+								  echo '
+								  <div class="panel panel-default">
+							    	<div class="panel-heading" role="tab" id="heading'.$count.'">
+							    	  <h4 class="panel-title">
+							        	<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#'.$count.'" aria-expanded="false" aria-controls="'.$count.'">
+								          '.get_sub_field('title').'
+								        </a>
+								      </h4>
+								    </div>
+								    <div id="'.$count.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$count.'">
+							      		<div class="panel-body">
+								        	'.get_sub_field('content').'
+								      	</div>
+								    </div>
+								  </div>';
+								}
+
+
+
+							  echo '
+							</div>
+							</div>
+					</section>
+						';
+					}
+
+				?>
+		
+
+		</div>
 	</div>
 	
 <?php get_footer(); ?>

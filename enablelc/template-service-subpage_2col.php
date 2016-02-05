@@ -20,6 +20,7 @@
 ?>
 
 	<div id="<?php echo $page_id; ?>" role="main" class="page-content">
+	
 		<div class="row">
 			<div class="content_wrap">
 				<?php custom_breadcrumbs(); ?>
@@ -82,9 +83,7 @@
 							
 // 							echo '<p>parental IDs (global): ';
 // 							print_r($GLOBALS['pID']);
-// 							
 // 							echo '</p>';
-// 							
 // 							echo '<p>Page ID: '.$post->ID.'</p>';
 							
 							if (have_posts()): while (have_posts()) : the_post(); ?>
@@ -167,43 +166,38 @@
 				?>
 
 				<?php 
-					if(have_rows('add_accordion')){
-						$count = 1;
-						echo '
-						<section class="row">
+				if(have_rows('add_accordion')){
+					$count = 1;
+					echo '
+					<section class="row">
 						<div class="content_wrap">
 							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-							  ';
-
-							  while (have_rows('add_accordion') ){
-							  	the_row();
-							  		$count++;
-								  echo '
-								  <div class="panel panel-default">
-							    	<div class="panel-heading '.$page_class.'" role="tab" id="heading'.$count.'">
-							    	  <h4 class="panel-title">
-							        	<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#'.$count.'" aria-expanded="false" aria-controls="'.$count.'">
-								          '.get_sub_field('title').'
-								        </a>
-								      </h4>
-								    </div>
-								    <div id="'.$count.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$count.'">
-							      		<div class="panel-body">
-								        	'.get_sub_field('content').'
-								      	</div>
-								    </div>
-								  </div>';
+								';
+								while (have_rows('add_accordion') ){
+									the_row();
+									$count++;
+									echo '
+									<div class="panel panel-default">
+										<div class="panel-heading '.$page_class.'" role="tab" id="heading'.$count.'">
+											<h4 class="panel-title">
+												<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#'.$count.'" aria-expanded="false" aria-controls="'.$count.'">
+													'.get_sub_field('title').'
+												</a>
+											</h4>
+										</div>
+										
+										<div id="'.$count.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$count.'">
+											<div class="panel-body">'.get_sub_field('content').'</div>
+										</div>
+									</div>';
 								}
 
-
-
-							  echo '
-							</div>
-							</div>
-					</section>
-						';
-					}
-
+							echo '
+						</div>
+					</div>
+				</section>
+					';
+				}
 				?>
 
 				<?php 
@@ -225,61 +219,58 @@
 				<?php 
 					if(have_rows('btn_grid')){
 						$size = get_field('grid_size');
-						$link = get_sub_field('link');
-
 						while (have_rows('btn_grid')) {
 							the_row();
-							if($link != ''){
-								echo '
-									<a href="'.$link.'">
-										<div class="'.$size.' btn-grid">
-											<img src="'.get_sub_field('image').'">
-											<div>'.get_sub_field('content').'</div>
-										</div>
-									</a>
-								';
-							}else {
-								echo '
+							echo '
+								<a href="'.get_sub_field('link').'">
 									<div class="'.$size.' btn-grid">
 										<img src="'.get_sub_field('image').'">
 										<div>'.get_sub_field('content').'</div>
 									</div>
-								';
-							}
+								</a>
+							';
 						}
 					}
 				?>
-
 
 			</div>
 			
 			<div id="column_2" class="col-xs-12 col-sm-3">
 				<section>
 					<div class="content_wrap">
-						<?php // display any page menu here
-						$page_menu = get_field('display_sub_menu');
-						if ($page_menu == true){
-						
-//						if ( count($GLOBALS['pID']) == 1 ) {
-//							echo wpb_list_child_pages();
-//						}
-
-
-
-							$which_page_menu = get_field('service_sub_menu');
-							if ($which_page_menu != ''){
-								wp_nav_menu(array(
-									'theme_location' => $which_page_menu,
-									'menu_class' => 'section_page_menu',
-									'container' => 'div',
-									'container_class' => 'page_nav',
-									'container_id' => 'page_menu',
-									'fallback_cb' => false
-								));
+						<?php 
+							
+							// display menu of child pages
+							if (is_page()) {
+								$children = '';
+								if(count($GLOBALS['pID']) > 1) {
+									$children .= wp_list_pages("title_li=&child_of=".$post->post_parent."&echo=0");
+									$children .= wp_list_pages("title_li=&depth=1&link_before=Back%20to%20&include=".$post->post_parent."&echo=0");
+								} else {
+									$children .= wp_list_pages("title_li=&child_of=".$post->ID."&echo=0");
+								}
+	
+								if ($children) { 
+									echo '<ul class="section_page_menu">'.$children.'</ul>';
+								}
 							}
+							
+							// other menus
+							$page_menu = get_field('display_sub_menu');
+							if ($page_menu == true){
+								$which_page_menu = get_field('service_sub_menu');
+								if ($which_page_menu != ''){
+									wp_nav_menu(array(
+										'theme_location' => $which_page_menu,
+										'menu_class' => 'section_page_menu',
+										'container' => 'div',
+										'container_class' => 'page_nav',
+										'container_id' => 'page_menu',
+										'fallback_cb' => false
+									));
+								}
 						}
-						
-				
+										
 						//display sidebar feature panels if they exist
 						$show_fp = get_field('dis_ft_pan');
 						if ($show_fp == true){
@@ -292,24 +283,6 @@
 							get_template_part('inc/display_form_no_row');							
 						}
 						
-
-
-// if (is_page()) {
-//   if($post->post_parent) {
-//     $children = wp_list_pages("title_li=&include=".$post->post_parent."&echo=0");
-//     $children.= wp_list_pages("title_li=&child_of=".$post->post_parent."&echo=0");
-//   } else {
-//     $children = wp_list_pages("title_li=&nclude=".$post->ID."&echo=0");
-//     $children.= wp_list_pages("title_li=&child_of=".$post->ID."&echo=0");
-//   }
-//   if ($children) { 
-//     echo '<ul class="section_page_menu">'.$children.'</ul>';
-//   }
-// }
-
-
-
-
 						?>
 					</div>
 				</section>

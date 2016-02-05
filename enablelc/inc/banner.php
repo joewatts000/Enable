@@ -1,15 +1,17 @@
 <?php
 	$show_banner = get_field('show_banner');
 	
-	
 	if ($show_banner == true){
 	
 		$use_parent_banner = get_field('use_parent_banner');
-		if ($use_parent_banner == true){
-			$banner_pID = $GLOBALS['pID'][0];
-		} else {
-			$banner_pID = null;
-		}
+
+		// if ($use_parent_banner == true){
+		// 	$banner_pID = $GLOBALS['pID'][0];
+		// } else {
+		// 	$banner_pID = null;
+		// }
+		
+		$banner_pID = null;
 
 		$banner_count = 0;
 		$display_arrows = true;

@@ -58,9 +58,15 @@
   </head>
   
   <body <?php body_class(); ?>>
+
     <div class="feedback-form-container">
 			<h2>Feedback form goes here...</h2>
 			<a href="#" class="close-form">Close</a>
+    </div>
+
+    <div class="signup-form-container">
+      <h2>Signup form goes here...</h2>
+      <a href="#" class="close-form">Close</a>
     </div>
     
     <div class="search-container">

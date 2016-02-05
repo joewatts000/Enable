@@ -1,4 +1,5 @@
-<?php get_header(); 
+<?php /* Template Name: Sitemap Page */ 
+get_header(); 
 get_template_part('inc/banner');
 ?>
 
@@ -13,7 +14,7 @@ get_template_part('inc/banner');
 			<section class="">
 				<div class="content_wrap clearfix">
 					<h1 class="page-title"><?php the_title(); ?></h1>
-					<div class="col-xs-12">
+					<div class="col-xs-12 full-width-col">
 											
 						<?php if (have_posts()): while (have_posts()) : the_post(); ?>
 							<!-- article -->
@@ -30,7 +31,9 @@ get_template_part('inc/banner');
 							</article>
 							<!-- /article -->
 						<?php endif; ?>	
-					</div>			
+
+						<?php get_template_part('/inc/sitemap'); ?>
+					</div>		
 				</div>
 			</section>
 		</div>

@@ -1,6 +1,6 @@
 <?php /* Template Name: Home Page */
-get_header(); 
-get_template_part('inc/banner');
+	get_header(); 
+	get_template_part('inc/banner');
 ?>
 
 	<div role="main" class="page-content">
@@ -37,18 +37,18 @@ get_template_part('inc/banner');
 		<section class="row">
 			<div class="content_wrap container no-padding news-events">
 				<div id="twitter">
- 
 					<script type="text/javascript">(function(){var ticker=document.createElement('script');ticker.type='text/javascript';ticker.async=true;ticker.src='//twitcker.com/ticker/Joewatts000.js?speed=4&background=019fe9&tweet=ffffff&open=true&container=own-container&own-container=twitter';(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(ticker);})();</script>
- 
 				</div>		
+				<h2>News &amp; Events</h2>
 				<?php 
-					$the_query = new WP_Query( array(
-						     'posts_per_page' => 3
-						) );
-				?>
-					<h2>News &amp; Events</h2>
-					<?php if ($the_query->have_posts()): while ($the_query->have_posts()) : $the_query->the_post(); ?>
-						<div class="col-sm-4 no-padding recent-post equalheights">
+					if(have_rows('add_ft_news')){
+						while(have_rows('add_ft_news')){
+							the_row();
+							$post_object = get_sub_field('chse_news_item');
+							$post = $post_object;
+							setup_postdata( $post ); 
+							?>
+								<div class="col-sm-4 no-padding recent-post equalheights">
 							<!-- article -->
 							<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 									<!-- post title -->
@@ -61,14 +61,11 @@ get_template_part('inc/banner');
 							</article>
 							<!-- /article -->
 						</div>
-					<?php endwhile; ?>
-					<?php else: ?>
-						<!-- article -->
-						<article>
-							<h2><?php _e( 'Sorry, nothing to display.', 'youniverse' ); ?></h2>
-						</article>
-						<!-- /article -->
-					<?php endif; wp_reset_postdata(); ?>
+
+							<?php wp_reset_postdata();
+						}
+					}
+				?>	
 			</div>
 		</section>
 		
