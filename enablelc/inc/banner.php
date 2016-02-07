@@ -10,7 +10,6 @@
 		// } else {
 		// 	$banner_pID = null;
 		// }
-		
 		$banner_pID = null;
 
 		$banner_count = 0;

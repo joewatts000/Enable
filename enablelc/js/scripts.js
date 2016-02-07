@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
     });
     /* END DR */
 
-    /* JW */
+    /* -----------------------------------  JW ---------------------------- */
 
     // Calendar stuff
     var ajaxurl = $('.ajaxurl').text();
@@ -58,15 +58,11 @@ jQuery(document).ready(function(){
 			if(selectedClassName == 'all'){
 				$('.calendar-container a.has-event').show().parent('.day-container').addClass('has-event');
 			}else {
-				console.log('aha');
-
 				$('.calendar-container a.has-event').hide().parent('.day-container').removeClass('has-event');
 
 				$('.calendar-container a.has-event').each(function(){
 					if($(this).hasClass(selectedClassName)){
 						$(this).show().parent('.day-container').addClass('has-event');
-					}else {
-						//console.log($(this).attr('class'), selectedClassName);
 					}
 				});
 			}
@@ -108,50 +104,54 @@ jQuery(document).ready(function(){
 				$('.calendar-container a.has-event').each(function(){
 					if($(this).hasClass(selectedClassName)){
 						$(this).show().parent('.day-container').addClass('has-event');
-					}else {
-						//console.log($(this).attr('class'), selectedClassName);
 					}
 				});
 			}
-
 		});
-
 	});
 
 	$('.calendar-filters select').on('change', function(e){
-		//e.preventDefault();
 		selectedClassName = $(this).val();
 		if(selectedClassName == 'all'){
-			$('.calendar-container a.has-event').show();
+			$('.calendar-container a.has-event').show().parent('.day-container').addClass('has-event');
+
 		}else {
 			$('.calendar-container a.has-event').hide().parent('.day-container').removeClass('has-event');
-
 			$('.calendar-container a.has-event').each(function(){
 				if($(this).hasClass(selectedClassName)){
 					$(this).show().parent('.day-container').addClass('has-event');
-				}else {
-					//console.log($(this).attr('class'), selectedClassName);
 				}
 			});
 		}
 	});
 
-	$('.calendar-container a.has-event').click(function(e){
-		e.preventDefault();
-		console.log('class');
-	});
+	// $('.calendar-container a.has-event').click(function(e){
+	// 	console.log('link');
+	// 	e.preventDefault();
+	// 	$(this).closest('.day-container').find('.hidden-calendar-poup').clone().appendTo('.cal-scroller');
+	// 	$('<a href="#" class="close-popup">Close</a>').appendTo('.cal-popup-inner');
+	// 	$('.cal-popup').show();
+	// });
 
-	$('.calendar-container .day-container').click(function(){
-		$(this).find('.hidden-calendar-poup').clone().appendTo('.cal-scroller');
-		$('<a href="#" class="close-popup">Close</a>').appendTo('.cal-popup-inner');
-		$('.cal-popup').show();
-	});
+	// $('.calendar-container .day-container').click(function(){
+	// 	console.log('container');
+	// 	$(this).parent('day-container').find('.hidden-calendar-poup').clone().appendTo('.cal-scroller');
+	// 	$('<a href="#" class="close-popup">Close</a>').appendTo('.cal-popup-inner');
+	// 	$('.cal-popup').show();
+	// });
 
 	$('body').click(function(e){
 		if($(e.target).hasClass('close-popup')){
-			console.log('hh');
-			$('.cal-popup-inner').empty();
+			//console.log('hh');
+			$('.cal-popup-inner .cal-scroller').empty();
 			$('.cal-popup').hide();
+			$('.close-popup').remove();
+
+		}else if($(e.target).hasClass('has-event')) {			
+			var eventId = $(e.target).attr('id');
+			$('#' + eventId).closest('.day-container').find('.hidden-calendar-poup').clone().appendTo('.cal-scroller');
+			$('<a href="#" class="close-popup">Close</a>').appendTo('.cal-popup-inner');
+			$('.cal-popup').show();
 		}
 		
 	});
@@ -194,7 +194,6 @@ jQuery(document).ready(function(){
 
 	$('.section_menu .menu-item-has-children>a').click(function(e){
 		e.preventDefault();
-		console.log('gg');
 		$(this).parent('.menu-item-has-children').find('.sub-menu').toggleClass('shown');
 	});
 

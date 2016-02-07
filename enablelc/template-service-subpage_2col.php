@@ -233,6 +233,25 @@
 					}
 				?>
 
+				<?php 
+					//display a social feed if selected 
+					$twitterfeed = get_field('twitter_feed');
+					$facebook_feed = get_field('facebook_feed');
+					$position = get_field('side_main');
+
+					if($twitterfeed && $position == 'main'){
+						echo '<div class="social_feed main">';
+							echo $twitterfeed;
+						echo '</div>';
+					}
+
+					if($facebook_feed && $position == 'main'){
+						echo '<div class="social_feed main">';
+							echo $facebook_feed;
+						echo '</div>';
+					}
+				?>
+
 			</div>
 			
 			<div id="column_2" class="col-xs-12 col-sm-3">
@@ -282,6 +301,23 @@
 						if ($contact_form == true){		
 							get_template_part('inc/display_form_no_row');							
 						}
+
+						//display a social feed if selected 
+						$twitterfeed = get_field('twitter_feed');
+						$facebook_feed = get_field('facebook_feed');
+						$position = get_field('side_main');
+
+						if($twitterfeed && $position == 'side'){
+							echo '<div class="social_feed side">';
+								echo $twitterfeed;
+							echo '</div>';
+						}	
+
+						if($facebook_feed && $position == 'side'){
+							echo '<div class="social_feed side">';
+								echo $facebook_feed;
+							echo '</div>';
+						}					
 						
 						?>
 					</div>

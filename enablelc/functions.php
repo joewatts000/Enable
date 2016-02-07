@@ -858,16 +858,16 @@ if( function_exists('acf_add_options_page') ) {
 }
 
 
-add_filter('wp_nav_menu_items','add_search_box_to_menu', 10, 2);
-function add_search_box_to_menu( $items, $args ) {
-	if( $args->theme_location == 'access-menu' ){
-		$items .= '<li class="search"><a href="#" class="open-search">Search</a></li>';
-		$items .= '<li class="feedback-form"><a href="#" class="open-feedback-form">Feedback</a>';
-	}
-	//return $items.get_search_form();
+// add_filter('wp_nav_menu_items','add_search_box_to_menu', 10, 2);
+// function add_search_box_to_menu( $items, $args ) {
+// 	if( $args->theme_location == 'access-menu' ){
+// 		$items .= '<li class="search"><a href="#" class="open-search">Search</a></li>';
+// 		$items .= '<li class="feedback-form"><a href="#" class="open-feedback-form">Feedback</a>';
+// 	}
+// 	//return $items.get_search_form();
 
-	return $items;
-}
+// 	return $items;
+// }
 
 
 // Breadcrumbs
@@ -1106,9 +1106,6 @@ function draw_calendar($month,$year){
 
 
     /* draw table */
-
-
-
     $monthNum  = $month;
     $dateObj   = DateTime::createFromFormat('!m', $monthNum);   
     $monthName = $dateObj->format('F'); 
@@ -1158,14 +1155,14 @@ function draw_calendar($month,$year){
             //echo $posts;
             $my_query = new WP_Query($args);
             if ( $my_query->have_posts() ) {
-                $calendar.= '<div class="day-container past-event">';
+                $calendar.= '<div class="day-container">';
                 $calendar.= '<div class="day-number">'.$list_day.'</div>';
                 
                 while ($my_query->have_posts()) : $my_query->the_post();
                     // $do_not_duplicate = $post->ID;
                     $post_class =  implode(" ", get_post_class());
                     $link = get_permalink();
-                    $calendar.= '<a href="'. $link .'" class="has-event '. $post_class .'"> '. get_the_title() .' </a>';
+                    $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
                     $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
                 endwhile;
                 $calendar.= '</div>';
@@ -1186,13 +1183,13 @@ function draw_calendar($month,$year){
                 $my_query = new WP_Query($args);
                 if ( $my_query->have_posts() ) {
                     
-                    $calendar.= '<div class="day-container future-event">';
+                    $calendar.= '<div class="day-container">';
                     $calendar.= '<div class="day-number">'.$list_day.'</div>';
                     while ($my_query->have_posts()) : $my_query->the_post();
                         //$do_not_duplicate = $post->ID;
                         $post_class =  implode(" ", get_post_class());
                         $link = get_permalink();
-                        $calendar.= '<a href="'. $link .'" class="has-event '. $post_class .'"> '. get_the_title() .' </a>';
+                        $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
                         $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
                     endwhile;
                     $calendar.= '</div>';
@@ -1306,8 +1303,6 @@ function get_offset() {
   if( isset($_POST['newmonth']) ) {
      $month = $_POST['newmonth'];
      $year = $_POST['newyear'];
-
-
     // if($chosenMonth){
     //     $month = $chosenMonth;
     // }
@@ -1364,15 +1359,15 @@ function get_offset() {
             //echo $posts;
             $my_query = new WP_Query($args);
             if ( $my_query->have_posts() ) {
-                $calendar.= '<div class="day-container past-event">';
+                $calendar.= '<div class="day-container">';
                 $calendar.= '<div class="day-number">'.$list_day.'</div>';
                 
                 while ($my_query->have_posts()) : $my_query->the_post();
                     // $do_not_duplicate = $post->ID;
                     $post_class =  implode(" ", get_post_class());
                     $link = get_permalink();
-                    $calendar.= '<a href="'. $link .'" class="has-event '. $post_class .'"> '. get_the_title() .' </a>';
-                    $calendar.= '<div class="hidden-calendar-poup">'. get_the_content().'</div>';
+                    $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
+                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2>'. get_the_content().'</div>';
                 endwhile;
                 $calendar.= '</div>';
                 wp_reset_postdata();
@@ -1380,35 +1375,33 @@ function get_offset() {
 
 
                 //now do future events
-                // $args = array(
-                //     'category_name' => 'events',
-                //     'post_status' => 'future',
-                //     'posts_per_page' => -1,
-                //     'year' => $year,
-                //     'monthnum' => $month,
-                //     'day' => $list_day
-                // );
+                $args = array(
+                    'category_name' => 'events',
+                    'post_status' => 'future',
+                    'posts_per_page' => -1,
+                    'year' => $year,
+                    'monthnum' => $month,
+                    'day' => $list_day
+                );
 
-                // $my_query = new WP_Query($args);
-                // if ( $my_query->have_posts() ) {
-                //     $calendar.= '<div class="day-container has-event future-event">';
-                //     $calendar.= '<div class="day-number">'.$list_day.'</div>';
-                //     while ($my_query->have_posts()) : $my_query->the_post();
-                //         //$do_not_duplicate = $post->ID;
-                //         $link = get_permalink();
-                //         $calendar.= '<a href="'. $link .'" class="has-event'. post_class() .'"> '. get_the_title() .' </a>';
-                //         $calendar.= '<div class="hidden-calendar-poup">'. get_the_content().'</div>';
-                //     endwhile;
-                //     $calendar.= '</div>';
-                //     wp_reset_postdata();
-                // }else {
-                //     $calendar.= '<div class="day-container">';
-                //     $calendar.= '<div class="day-number">'.$list_day.'</div>';
-                // }
-                
-
-                $calendar.= '<div class="day-container">';
-                $calendar.= '<div class="day-number">'.$list_day.'</div>';
+                $my_query = new WP_Query($args);
+                if ( $my_query->have_posts() ) {
+                    
+                    $calendar.= '<div class="day-container">';
+                    $calendar.= '<div class="day-number">'.$list_day.'</div>';
+                    while ($my_query->have_posts()) : $my_query->the_post();
+                        //$do_not_duplicate = $post->ID;
+                        $post_class =  implode(" ", get_post_class());
+                        $link = get_permalink();
+                        $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
+                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
+                    endwhile;
+                    $calendar.= '</div>';
+                    wp_reset_postdata();
+                }else {
+                    $calendar.= '<div class="day-container">';
+                    $calendar.= '<div class="day-number">'.$list_day.'</div>';
+                }
             
             }
             
@@ -1493,7 +1486,7 @@ function get_offset() {
 
   }
 
-  die;
+  //die;
 }
 
 

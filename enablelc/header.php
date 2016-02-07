@@ -59,10 +59,19 @@
   
   <body <?php body_class(); ?>>
 
-    <div class="feedback-form-container">
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=158552637664275";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    <!-- <div class="feedback-form-container">
 			<h2>Feedback form goes here...</h2>
 			<a href="#" class="close-form">Close</a>
-    </div>
+    </div> -->
 
     <div class="signup-form-container">
       <h2>Signup form goes here...</h2>

@@ -165,7 +165,6 @@ div.photo_credit p { font-size: 12px; color: #333; }
 }
 
 #accessibility_menu li { display: inline-block; margin-left: 5px; margin-right: 0; }
-#accessibility_menu li:nth-child(4) {margin-left: 1px;}  /* hack fix for random gap between menu items, fix this propoerly later */
 #accessibility_menu li a { display: block; padding: 6px 15px; font-size: 14px; color: #fff; background-color: #93d6e9; }
 #accessibility_menu li a:hover { text-decoration: none; background-color: #59aac1; }
 
@@ -374,7 +373,9 @@ ul.section_page_menu li a:focus { text-decoration: none; }
 /* Calendar
 ------------------------------- */
 
-.calendar-container { padding: 10px 50px 0 50px;}
+.calendar-container { padding: 10px 50px 0 50px; color: #fff;}
+.calendar-container table {color: #000;}
+.calendar-container p {color: #000;}
 .calendar-filters {padding: 50px 50px 0 50px;}
 .calendar-filters select {
    /*background: transparent;*/
@@ -490,7 +491,14 @@ h1.content_wrap { margin: 0 auto; padding: 10px 30px; color: #fff; font-size: 24
 #menu-about-us-menu { margin-bottom: 0;  background: #F8FCFE;}
 #menu-about-us-menu li, #menu-about-us-menu-1 li { width: 33.33%; }
 
-.social_feed { background-color: #eee; padding: 15px; }
+.social_feed { 
+	padding: 15px; 
+}
+
+.social_feed.main {
+	width: 50%;
+    float: left;
+}
 
 blockquote { margin: 30px 0; color: #333; font-size: 22px; }
 blockquote p:last-child { color: #888; font-size: 14px; }

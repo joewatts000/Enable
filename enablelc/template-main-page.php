@@ -1,15 +1,7 @@
 <?php /* Template Name: Main Page */ 
 	get_header(); 
+	get_template_part('inc/banner');
 ?>
-
-<!-- 
-	<div class="row">
-		<h1 class="content_wrap"><?php the_title(); ?></h1>
-	</div>
- -->
-
-	<?php get_template_part('inc/banner'); ?>
-
 	<div role="main" class="page-content">
 	
 		<div class="row">
@@ -53,33 +45,65 @@
 				';
 			}
 		?>
-				
-		<section class="row">
+		<section class="row column_wrapper">
 			<div class="content_wrap clearfix">
-			
-				<div class="col-xs-12 col-sm-8 debug_mh">
-					<h1 class="page-title"><?php the_title(); ?></h1>		
+				<h1 class="page-title"><?php the_title(); ?></h1>
+				<div class="col-sm-8">
 					<?php 
-					
-					if (have_posts()): while (have_posts()) : the_post(); ?>
-						<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-							<?php the_content(); ?>
-							<br class="clear" />
+						if (have_posts()): while (have_posts()) : the_post(); ?>
+							<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+								<?php the_content(); ?>
+								<br class="clear" />
+							</article>
+						<?php 
+						endwhile;
+						else: 
+						?>
+						<article>
+							<h2><?php _e( 'Sorry, nothing to display.', 'enable' ); ?></h2>
 						</article>
-					<?php 
-					endwhile;
-					else: 
+						<?php endif; 
 					?>
-					<article>
-						<h2><?php _e( 'Sorry, nothing to display.', 'enable' ); ?></h2>
-					</article>
-					<?php endif; ?>
+
+					<?php
+						//display a social feed if selected 
+						$twitterfeed = get_field('twitter_feed');
+						$facebook_feed = get_field('facebook_feed');
+						$position = get_field('side_main');
+
+						if($twitterfeed && $position == 'main'){
+							echo '<div class="social_feed main">';
+								echo $twitterfeed;
+							echo '</div>';
+						}
+
+						if($facebook_feed && $position == 'main'){
+							echo '<div class="social_feed main">';
+								echo $facebook_feed;
+							echo '</div>';
+						}
+					?>
 				</div>
 				
-				<div class="col-xs-12 col-sm-4">
-					<div class="social_feed debug_mh">
-						<h3>Social feed here</h3>
-					</div>
+				<div class="col-sm-4">
+					<?php
+						//display a social feed if selected 
+						$twitterfeed = get_field('twitter_feed');
+						$facebook_feed = get_field('facebook_feed');
+						$position = get_field('side_main');
+
+						if($twitterfeed && $position == 'side'){
+							echo '<div class="social_feed side">';
+								echo $twitterfeed;
+							echo '</div>';
+						}	
+
+						if($facebook_feed && $position == 'side'){
+							echo '<div class="social_feed side">';
+								echo $facebook_feed;
+							echo '</div>';
+						}
+					?>
 				</div>
 				
 			</div>
