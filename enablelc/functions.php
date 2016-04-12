@@ -149,10 +149,14 @@ function work_nav()
 function html5blank_header_scripts()
 {
     if ($GLOBALS['pagenow'] != 'wp-login.php' && !is_admin()) {
-            // Scripts minify
-            wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array(), '1.0.0');
-            // Enqueue Scripts
-            wp_enqueue_script('html5blankscripts');
+        // Scripts minify
+        wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array(), '1.0.0');
+        // Enqueue Scripts
+        wp_enqueue_script('html5blankscripts');
+        // Scripts minify
+        wp_register_script('owlcarousel', get_template_directory_uri() . '/js/lib/slick.min.js', array(), '1.0.0');
+        // Enqueue Scripts
+        wp_enqueue_script('owlcarousel');
     }
 }
 
@@ -263,13 +267,15 @@ if (function_exists('register_sidebar'))
     // Define Sidebar Widget Area 2
     register_sidebar(array(
         'name' => __('Widget Area 2', 'html5blank'),
-        'description' => __('Description for this widget-area...', 'html5blank'),
+        'description' => __('For the homepage Twitter feed', 'html5blank'),
         'id' => 'widget-area-2',
         'before_widget' => '<div id="%1$s" class="%2$s">',
         'after_widget' => '</div>',
         'before_title' => '<h3>',
         'after_title' => '</h3>'
     ));
+
+    
 }
 
 // Remove wp_head() injected Recent Comment styles
@@ -486,7 +492,7 @@ add_filter('image_send_to_editor', 'remove_width_attribute', 10 ); // Remove wid
         ),
         'public' => true,
         'has_archive' => true,
-        'rewrite' => array( 'slug' => 'green-space' ),
+        'rewrite' => array( 'slug' => 'green-spaces' ),
         'capability_type' => 'post',
         'supports' => array( 'title', 'editor')
       )
@@ -605,7 +611,7 @@ add_filter('image_send_to_editor', 'remove_width_attribute', 10 ); // Remove wid
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'green_space', 'hierarchical' => true, 'with_front' =>false ),
+			'rewrite'           => array( 'slug' => 'green_spaces', 'hierarchical' => true, 'with_front' =>false ),
 		);
 
 		register_taxonomy( 'green', array( 'green_spaces' ), $gs_args );
@@ -705,9 +711,15 @@ function custom_taxonomies_terms_links(){
 function rounded_btns ($btns) {
     extract( shortcode_atts( array(
       'text' => 'text',
-      'url' => 'url' // This is the ID of the accordion grouping
+      'url' => 'url',
+      'type' => 'type' 
     ), $btns ) );
-    return '<a href="'.$url.'" class="rounded-btn">'.$text.'</a>';
+    
+    if ($type == 'weblink'){
+			$type .= ' new_window'; 
+    }
+    
+    return '<p><a href="'.$url.'" class="rounded-btn rb_'.$type.'">'.$text.'</a></p>';
 }
 add_shortcode('round_btn', 'rounded_btns'); 
 
@@ -938,24 +950,26 @@ function custom_breadcrumbs() {
              
             // Get post category info
             $category = get_the_category();
+
+
              
             // Get last category post is in
-            $last_category = end(array_values($category));
+            //$last_category = end(array_values($category));
              
-            // Get parent any categories and create array
-            $get_cat_parents = rtrim(get_category_parents($last_category->term_id, true, ','),',');
-            $cat_parents = explode(',',$get_cat_parents);
+            //Get parent any categories and create array
+            $get_cat_parents = get_category_parents($category->term_id, true, ',');
+            // $cat_parents = explode(',',$get_cat_parents);
              
             // Loop through parent categories and store in variable $cat_display
             $cat_display = '';
-            foreach($cat_parents as $parents) {
-                $cat_display .= '<li class="item-cat">'.$parents.'</li>';
-                $cat_display .= '<li class="separator"> ' . $separator . ' </li>';
-            }
+            // foreach($cat_parents as $parents) {
+            //     $cat_display .= '<li class="item-cat">'.$parents.'</li>';
+            //     $cat_display .= '<li class="separator"> ' . $separator . ' </li>';
+            // }
              
             // If it's a custom post type within a custom taxonomy
             $taxonomy_exists = taxonomy_exists($custom_taxonomy);
-            if(empty($last_category) && !empty($custom_taxonomy) && $taxonomy_exists) {
+            if(empty($category) && !empty($custom_taxonomy) && $taxonomy_exists) {
                   
                 $taxonomy_terms = get_the_terms( $post->ID, $custom_taxonomy );
                 $cat_id         = $taxonomy_terms[0]->term_id;
@@ -966,7 +980,7 @@ function custom_breadcrumbs() {
             }
              
             // Check if the post is in a category
-            if(!empty($last_category)) {
+            if(!empty($category)) {
                 echo $cat_display;
                 echo '<li class="item-current item-' . $post->ID . '"><strong class="bread-current bread-' . $post->ID . '" title="' . get_the_title() . '">' . get_the_title() . '</strong></li>';
                  
@@ -1100,6 +1114,14 @@ function custom_breadcrumbs() {
 }
 
 
+function get_the_content_with_formatting ($more_link_text = '(more...)', $stripteaser = 0, $more_file = '') {
+    $content = get_the_content($more_link_text, $stripteaser, $more_file);
+    $content = apply_filters('the_content', $content);
+    $content = str_replace(']]>', ']]&gt;', $content);
+    return $content;
+}
+
+
 
 // draw a calendar for the events page 
 function draw_calendar($month,$year){
@@ -1163,7 +1185,7 @@ function draw_calendar($month,$year){
                     $post_class =  implode(" ", get_post_class());
                     $link = get_permalink();
                     $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
-                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
+                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content_with_formatting().'</div></div>';
                 endwhile;
                 $calendar.= '</div>';
                 wp_reset_postdata();
@@ -1190,7 +1212,7 @@ function draw_calendar($month,$year){
                         $post_class =  implode(" ", get_post_class());
                         $link = get_permalink();
                         $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
-                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
+                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content_with_formatting().'</div></div>';
                     endwhile;
                     $calendar.= '</div>';
                     wp_reset_postdata();
@@ -1367,7 +1389,7 @@ function get_offset() {
                     $post_class =  implode(" ", get_post_class());
                     $link = get_permalink();
                     $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
-                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2>'. get_the_content().'</div>';
+                    $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2>'. get_the_content_with_formatting() .'</div>';
                 endwhile;
                 $calendar.= '</div>';
                 wp_reset_postdata();
@@ -1394,7 +1416,7 @@ function get_offset() {
                         $post_class =  implode(" ", get_post_class());
                         $link = get_permalink();
                         $calendar.= '<a href="#" class="has-event '. $post_class .'" id="post-'.get_the_ID ().'"> '. get_the_title() .' </a>';
-                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content().'</div></div>';
+                        $calendar.= '<div class="hidden-calendar-poup"><h2>'.get_the_title().'</h2><div>'. get_the_content_with_formatting() .'</div></div>';
                     endwhile;
                     $calendar.= '</div>';
                     wp_reset_postdata();
@@ -1491,39 +1513,39 @@ function get_offset() {
 
 
 
-function remove_editor_init() {
-	// If not in the admin, return.
-	if ( ! is_admin() ) {
-		 return;
-	}
-
-	// Get the post ID on edit post with filter_input super global inspection.
-	$current_post_id = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
-	// Get the post ID on update post with filter_input super global inspection.
-	$update_post_id = filter_input( INPUT_POST, 'post_ID', FILTER_SANITIZE_NUMBER_INT );
-
-	// Check to see if the post ID is set, else return.
-	if ( isset( $current_post_id ) ) {
-		 $post_id = absint( $current_post_id );
-	} else if ( isset( $update_post_id ) ) {
-		 $post_id = absint( $update_post_id );
-	} else {
-		 return;
-	}
-
-	// Don't do anything unless there is a post_id.
-	if ( isset( $post_id ) ) {
-		// Get the template of the current post.
-		$template_file = get_post_meta( $post_id, '_wp_page_template', true );
-
-		// Example of removing page editor for page-your-template.php template.
-		if ( 'homepage.php' === $template_file ) {
-			 remove_post_type_support( 'page', 'editor' );
-			 // Other features can also be removed in addition to the editor. See: https://codex.wordpress.org/Function_Reference/remove_post_type_support.
-		}
-	}
-}
-add_action( 'init', 'remove_editor_init' );
+// function remove_editor_init() {
+// 	// If not in the admin, return.
+// 	if ( ! is_admin() ) {
+// 		 return;
+// 	}
+// 
+// 	// Get the post ID on edit post with filter_input super global inspection.
+// 	$current_post_id = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
+// 	// Get the post ID on update post with filter_input super global inspection.
+// 	$update_post_id = filter_input( INPUT_POST, 'post_ID', FILTER_SANITIZE_NUMBER_INT );
+// 
+// 	// Check to see if the post ID is set, else return.
+// 	if ( isset( $current_post_id ) ) {
+// 		 $post_id = absint( $current_post_id );
+// 	} else if ( isset( $update_post_id ) ) {
+// 		 $post_id = absint( $update_post_id );
+// 	} else {
+// 		 return;
+// 	}
+// 
+// 	// Don't do anything unless there is a post_id.
+// 	if ( isset( $post_id ) ) {
+// 		// Get the template of the current post.
+// 		$template_file = get_post_meta( $post_id, '_wp_page_template', true );
+// 
+// 		// Example of removing page editor for page-your-template.php template.
+// 		if ( 'homepage.php' === $template_file ) {
+// 			 remove_post_type_support( 'page', 'editor' );
+// 			 // Other features can also be removed in addition to the editor. See: https://codex.wordpress.org/Function_Reference/remove_post_type_support.
+// 		}
+// 	}
+// }
+// add_action( 'init', 'remove_editor_init' );
 
 
 

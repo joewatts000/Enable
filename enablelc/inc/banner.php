@@ -5,12 +5,11 @@
 	
 		$use_parent_banner = get_field('use_parent_banner');
 
-		// if ($use_parent_banner == true){
-		// 	$banner_pID = $GLOBALS['pID'][0];
-		// } else {
-		// 	$banner_pID = null;
-		// }
-		$banner_pID = null;
+		if ($use_parent_banner == true && isset($GLOBALS['pID'])){
+			$banner_pID = $GLOBALS['pID'][0];
+		} else {
+			$banner_pID = null;
+		}
 
 		$banner_count = 0;
 		$display_arrows = true;
@@ -64,7 +63,7 @@
 						if ($show_caption == true && $banner_link_url != ''){
 							//echo get_field('banner_link');
 							echo '
-								<div class="carousel-caption clearfix'.($photo_credit == true ? ' photo_credit' : '').' no-padding"><div class="col-xs-6 text-side equalheights">
+								<div class="carousel-caption clearfix'.($photo_credit == true ? ' photo_credit' : '').' no-padding"><div class="col-xs-6 text-side">
 									';
 									if ($show_title == true){
 										echo '<h2>'.get_the_title().'</h2>';
@@ -72,7 +71,7 @@
 							
 									echo $banner_text;
 							
-									echo '</div><div class="col-xs-6 logo-side no-padding equalheights">';
+									echo '</div><div class="col-xs-6 logo-side no-padding">';
 							
 
 									if ($banner_link_url != ''){
@@ -83,7 +82,7 @@
 							';
 						}else if($show_caption == true){
 							echo '
-								<div class="carousel-caption clearfix'.($photo_credit == true ? ' photo_credit' : '').' no-padding"><div class="text-side equalheights">
+								<div class="carousel-caption clearfix'.($photo_credit == true ? ' photo_credit' : '').' no-padding"><div class="text-side">
 									';
 									if ($show_title == true){
 										echo '<h2>'.get_the_title().'</h2>';

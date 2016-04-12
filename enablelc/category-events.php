@@ -6,6 +6,51 @@
 				<?php custom_breadcrumbs(); ?>
 			</div>
 		</div>
+
+		<!-- <?php // Section menu switching code
+			$page_class = 'colour_events';
+			$page_id = 'page_events';
+
+			$which_menu = 'events'; //get_field('service_menu');
+			if ($which_menu != ''){
+				echo '
+				<section class="row">
+					<div class="content_wrap '.$page_class.'">
+
+						<div class="navbar-header service_menu_header '.$page_class.'">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar_service" aria-expanded="false" aria-controls="navbar">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button><span class="menu_label">Service menu</span>
+						</div>
+
+						<div id="navbar_service" class="navbar-collapse collapse">
+						';
+			
+						wp_nav_menu(array(
+							'theme_location' => $which_menu,
+							'container' => 'div',
+							'container_class' => 'collapse navbar-collapse',
+							'container_id' => 'navbar_service',
+							'menu_class' => 'nav navbar-nav section_menu',
+							'link_before' => '<span>',     
+							'link_after'  => '</span>',
+							'fallback_cb' => false
+						));
+				
+						echo '
+						</div>
+					</div>
+				</section>
+				';
+			}
+		?> -->
+
+
+
+
 		<!-- section -->
 		<section>
 			<div class="column_wrapper row">

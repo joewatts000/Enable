@@ -25,11 +25,9 @@ a:hover, article a:hover {
 }
 
 .signup-form-container {
-    height: 0;
+   display: none;
     overflow: hidden;
     width: 100vw;
-    position: fixed;
-    z-index: 99999;
     color: #fff;
     text-align: center;
     background: rgba(8,162,205,1);
@@ -42,44 +40,7 @@ a:hover, article a:hover {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08a2cd', endColorstr='#8eccc7', GradientType=0 );
 }
 
-.cal-popup { z-index: 9; }
 
-.close-popup {    
-	position: absolute;
-    display: block;
-    right: 20px;
-    top: 20px;
-    padding: 10px;
-    background: #97D6E2;
-    border-radius: 10px;
-    color: #fff;
-}
-
-.cal-popup-inner { top: 10%; width:80%; left: 10%; overflow: hidden; padding: 70px; }
-
-@media (min-width: 600px){
-	.cal-popup-inner {
-		max-width: 600px;
-		left: 0;
-		right: 0;
-	}
-}
-
-.hidden-calendar-poup {
-	padding-top: 25px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-}
-
-.hidden-calendar-poup h2 {
-	margin-bottom: 30px;
-}
-
-.cal-scroller {
-	overflow: scroll;
-    height: 100%;
-}
 
 .page-template-template-about-subpage-php #icon_about_us_menu {display: block !important;}
 
@@ -99,12 +60,14 @@ a:hover, article a:hover {
 }
 
 
+/* 
 .search-container {height: 0px;}
+ */
 
 .search-container .close-form { border-radius: 10px; }
 
 .search-container form.search {
-    padding-top: 100px;
+    padding: 100px 15px;
 }
 
 #myCarousel, ul#breadcrumbs {display: none;}
@@ -128,10 +91,128 @@ textarea.wpcf7-form-control {
 }
 
 
+/* REMOVED BY DR
 .rounded-btn { background: url('img/link_icon_pdf.png') 15px center no-repeat; background-size: 25px; }
+ */
 
 .alignleft {
 	float: left;
     margin-right: 20px;
     margin-bottom: 20px;
 }
+
+.panel-default > .panel-heading a {
+    position:relative;
+    -webkit-transition: all 0.7s; /* Safari */
+    transition: all 0.7s;
+}
+
+.panel-default > .panel-heading a:before {
+    
+
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 10px 10px 0;
+    border-color: #FFFFFF transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 20px;
+
+}
+
+.panel-default > .panel-heading a.collapsed:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent #FFFFFF;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 14px;   
+}
+
+
+.signup-form-container {
+   /*  top: 0; */
+    /*padding-top: 30px;
+    padding-bottom: 30px;*/
+}
+
+
+.signup-form-container .inner {
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+    padding: 30px 15px 60px 15px;
+    /*text-align: left;*/
+}
+
+.signup-form-container .inner .wpcf7 {
+    margin-bottom: 30px;
+}
+
+.signup-form-container .inner .wpcf7 input, .signup-form-container .inner .wpcf7 select{
+    color:#000;
+}
+
+.signup-form-container .inner .wpcf7 .wpcf7-submit {
+    color: #fff;
+}
+
+.signup-form-container .inner .close-form {
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+.pagination {
+    width: 100%;
+    text-align: center;
+}
+
+ul.section_page_menu li {
+    background-color: transparent !important;
+    border-bottom-width: 1px !important;
+    border-bottom-style: dotted !important;
+}
+
+
+
+
+#breadcrumbs { padding: 7px 14px; margin-bottom: 0; background-color: #78cce4; font-size: 12px; background-color: #97d6e2; color: #fff;}
+#breadcrumbs li { display: inline-block;}
+#breadcrumbs a { color: #fff; margin: 0 5px; }
+#breadcrumbs a:hover { color: #fff; text-decoration: underline; }
+#breadcrumbs li.item-current a { color: #fff; }
+#breadcrumbs strong {margin-left: 5px;}
+
+
+
+.bottom-content .content_wrap {
+    background-color: #fff;
+}
+
+.homepage-twitter {
+    border-bottom: 1px solid #88CDEB;
+    padding: 20px 0px 30px 0px;
+    margin-bottom: 40px;
+}
+
+.homepage-twitter h3 {
+    border-bottom: 0;
+}
+
+.homepage-twitter p.rtw_main {
+    width:90%;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+
+
+

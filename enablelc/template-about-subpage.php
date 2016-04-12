@@ -285,6 +285,22 @@ get_template_part('inc/banner');
 					}
 
 				?>
+
+				<?php
+
+					$btm_content = get_field('btm_content');
+					if ($btm_content != ''){		
+						echo '
+						<section class="row bottom-content">
+							<div class="content_wrap clearfix">
+								<div class="col-xs-12">
+									'.$btm_content.'
+								</div>
+							</div>
+						</section>
+						';
+					}
+				?>
 		
 
 		</div>

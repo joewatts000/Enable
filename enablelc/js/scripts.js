@@ -169,27 +169,31 @@ jQuery(document).ready(function(){
 
 
 	$('.open-feedback-form').click(function(){
-		$('.feedback-form-container').animate({height:windowHeight},200);
+		$('.feedback-form-container').animate({height:'auto', 'padding': '30px'},200);
 	});
 
 	$('.feedback-form-container .close-form').click(function(){
-		$('.feedback-form-container').animate({height:0},200);
+		$('.feedback-form-container').animate({height:0, 'padding': '0px'},200);
 	});
-
-	$('.open-search').click(function(){
-		$('.search-container').animate({height:320},200);
-	});
+	
 
 	$('.open-signup').click(function(){
-		$('.signup-form-container').animate({height:320},200);
+		$('.signup-form-container').slideToggle(400);
 	});
 
 	$('.signup-form-container .close-form').click(function(){
-		$('.signup-form-container').animate({height:0},200);
+		// $('.signup-form-container').animate({height:0, 'padding': '0px'},200);
+		$('.signup-form-container').slideToggle(400);
+	});
+
+	$('.open-search').click(function(){
+		// $('.search-container').animate({height:320},200);
+		$('.search-container').slideToggle(400);
 	});
 
 	$('.search-container .close-form').click(function(){
-		$('.search-container').animate({height:0},200);
+		// $('.search-container').animate({height:0},200);
+		$('.search-container').slideToggle(400);
 	});
 
 	$('.section_menu .menu-item-has-children>a').click(function(e){
@@ -213,8 +217,43 @@ jQuery(document).ready(function(){
 		$('.column_wrapper').attr('id', section_ID);
 	}
 	
-
+	// $('.mgl_tweets').owlCarousel({
+	//     loop:true,
+	//     margin:10,
+	//     nav:true,
+	//     responsive:{
+	//         0:{
+	//             items:1
+	//         },
+	//         600:{
+	//             items:3
+	//         },
+	//         1000:{
+	//             items:5
+	//         }
+	//     }
+	// });
+	// 
+	// $('.mgl_tweets').slick({
+	//   infinite: true,
+	//   slidesToShow: 3,
+	//   slidesToScroll: 3
+	// });
 
 	/* END JW */
+	
+	
+	
+	// Added by DR
+	
+	// Open href in a new window -------------------------------------------------
+	//$("body").on("click", "a.new_window", function(e) {
+	$("body").on("click", "a.rb_weblink", function(e) {
+		e.preventDefault();
+		var vHref = $(this).attr('href');
+		window.open(vHref);
+	});
+
+	
 
 });

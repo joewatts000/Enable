@@ -30,6 +30,7 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
 
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
 			var gIsHomepage = <?php echo $js_homepage; ?>;
@@ -59,14 +60,16 @@
   
   <body <?php body_class(); ?>>
 
-  <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=158552637664275";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+		<div id="fb-root"></div>
+		<script>
+			(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=158552637664275";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
 
     <!-- <div class="feedback-form-container">
 			<h2>Feedback form goes here...</h2>
@@ -74,19 +77,21 @@
     </div> -->
 
     <div class="signup-form-container">
-      <h2>Signup form goes here...</h2>
-      <a href="#" class="close-form">Close</a>
+      <div class="inner">
+          <?php echo do_shortcode('[contact-form-7 id="2090" title="Subscribe Header Form"]'); ?>
+          <a href="#" class="close-form">Close</a>
+      </div>
     </div>
     
     <div class="search-container">
         <form class="search" method="get" action="<?php echo home_url(); ?>" role="search">
-        <input class="search-input" type="search" name="s" placeholder="<?php _e( 'Enter text', 'html5blank' ); ?>">
-        <button class="search-submit" type="submit" role="button"><?php _e( 'Search', 'youniverse' ); ?></button>
+					<input class="search-input" type="search" name="s" placeholder="<?php _e( 'Enter text', 'html5blank' ); ?>">
+					<button class="search-submit" type="submit" role="button"><?php _e( 'Search', 'youniverse' ); ?></button>
+					<a href="#" class="close-form">Close</a>
         </form>
-        <a href="#" class="close-form">Close</a>
     </div>
     
     <div id="site_wrapper" class="container-fluid">
   
-      <?php get_template_part('inc/menu'); ?>
+		<?php get_template_part('inc/menu'); ?>
    

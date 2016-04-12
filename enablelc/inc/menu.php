@@ -13,6 +13,7 @@
 						'theme_location' => 'access-menu',
 						'menu_id' => 'accessibility_menu',
 						'menu_class' => 'clearfix',
+
 						'fallback_cb' => false
 					));
 					?>

@@ -6,6 +6,8 @@
 				<?php //custom_breadcrumbs(); ?>
 			</div>
 		</div>
+		
+
 		<!-- section -->
 		<section class="page-content">
 			<div class="column_wrapper row">

@@ -89,7 +89,6 @@
 							if (have_posts()): while (have_posts()) : the_post(); ?>
 								<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 									<?php the_content(); ?>
-									<br class="clear" />
 								</article>
 							<?php 
 							endwhile;
@@ -154,7 +153,7 @@
 				<?php // display any maps
 				if (have_rows('locations')){		
 					echo '
-					<section>
+					<section class="map_wrap">
 						<div class="content_wrap">
 						';
 						get_template_part('inc/display_map');							
@@ -222,12 +221,22 @@
 						while (have_rows('btn_grid')) {
 							the_row();
 							echo '
-								<a href="'.get_sub_field('link').'">
-									<div class="'.$size.' btn-grid">
-										<img src="'.get_sub_field('image').'">
-										<div>'.get_sub_field('content').'</div>
+								
+									<div class="'.$size.' btn-grid">';
+
+										if(get_sub_field('link') != ''){
+											echo '<a href="'.get_sub_field('link').'">';
+										}
+										
+											echo '<img src="'.get_sub_field('image').'">';
+
+										if(get_sub_field('link') != ''){
+											echo '</a>';
+										}
+										
+										echo '<div>'.get_sub_field('content').'</div>
 									</div>
-								</a>
+								
 							';
 						}
 					}
@@ -252,6 +261,22 @@
 					}
 				?>
 
+				<?php
+
+					$btm_content = get_field('btm_content');
+					if ($btm_content != ''){		
+						echo '
+						<section class="bottom-content">
+							<div class="content_wrap">
+								<article>
+									'.$btm_content.'
+								</article>
+							</div>
+						</section>
+						';
+					}
+				?>
+
 			</div>
 			
 			<div id="column_2" class="col-xs-12 col-sm-3">
@@ -260,13 +285,16 @@
 						<?php 
 							
 							// display menu of child pages
-							if (is_page()) {
+							$child_menu = get_field('display_child_menu');
+							// can check whether this value is true and if so display them and if not then let you build your 
+							// own
+							if (is_page() && $child_menu == true) {
 								$children = '';
 								if(count($GLOBALS['pID']) > 1) {
-									$children .= wp_list_pages("title_li=&child_of=".$post->post_parent."&echo=0");
+									$children .= wp_list_pages("title_li=&depth=2&child_of=".$post->post_parent."&echo=0");
 									$children .= wp_list_pages("title_li=&depth=1&link_before=Back%20to%20&include=".$post->post_parent."&echo=0");
 								} else {
-									$children .= wp_list_pages("title_li=&child_of=".$post->ID."&echo=0");
+									$children .= wp_list_pages("title_li=&depth=1&child_of=".$post->ID."&echo=0");
 								}
 	
 								if ($children) { 
@@ -288,7 +316,26 @@
 										'fallback_cb' => false
 									));
 								}
-						}
+							}
+
+							$create_menu = get_field('create_menu');
+
+							if ($create_menu == true){
+								if(have_rows('add_menu_item')){
+									echo '<ul class="section_page_menu">';
+									while(have_rows('add_menu_item')){
+										the_row();
+										echo '
+											<li class="'.$page_class.'">
+												<a href="'.get_sub_field('pick_item').'">'.get_sub_field('title').'</a>
+											</li>
+										';
+									}
+									echo '</ul>';
+								}
+							}
+
+
 										
 						//display sidebar feature panels if they exist
 						$show_fp = get_field('dis_ft_pan');

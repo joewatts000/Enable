@@ -2,6 +2,7 @@
 	
 		<div class="footer-inner">
 			<img src="<?php echo dirname( get_bloginfo('stylesheet_url') ); ?>/style/img/enable_logo_220.png" alt="Enable Leisure and Culture" />
+
 			<?php
 				wp_nav_menu(array(
 					'theme_location' => 'footer-menu',
@@ -11,7 +12,12 @@
 				));
 			?>
 			
-			
+			<ul class="social_footer_list">
+				<!-- <li><a class="sm_fb sm_icon" href="#" title="Visit our Facebook page">Facebook</a></li> -->
+				<li><a class="sm_tw sm_icon" href="https://twitter.com/enablelc" title="Visit our Twitter page">Twitter</a></li>
+				<li><a class="sm_li sm_icon" href="https://www.linkedin.com/company/enable-leisure-and-culture" title="Visit our LinkedIn page">LinkedIn</a></li>
+			</ul>
+
 			<p class="copyright">&copy;&nbsp;enable&nbsp;<?php echo date("Y"); ?></p>
 		</div>
 		

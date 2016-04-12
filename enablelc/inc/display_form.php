@@ -4,7 +4,8 @@
 		<div class="content_wrap">
 			';
 				
-			the_field('choose_form');
+			$form_shortcode = get_field('choose_form');
+			echo do_shortcode($form_shortcode);
 			
 			echo '
 		</div>

@@ -8,6 +8,7 @@ get_template_part('inc/banner_blog');
 				<?php custom_breadcrumbs(); ?>
 			</div>
 		</div>
+		
 		<section>
 			<div class="column_wrapper row">
 				<?php 
@@ -19,7 +20,7 @@ get_template_part('inc/banner_blog');
 					}
 				?>	
 				<div class="content_wrap">
-					<h1 class="page-title blog-title"><?php _e( 'Archives', 'youniverse' ); ?></h1>
+					<h1 class="page-title blog-title">Archives (archive.php)</h1>
 
 					<div class="col-sm-8">							
 						
